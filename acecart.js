@@ -2,6 +2,13 @@ const AceCart = (function() {
   function Cart(name) {
     this.name = name;
     this.products = [];
+
+    Object.defineProperty(this, "products", {
+      value: [],
+      enumerable: false,
+      configurable: false
+    });
+
     this.load();
   }
 
@@ -67,7 +74,9 @@ const AceCart = (function() {
     this.save();
   };
 
-  Cart.prototype.getCart = function() {};
+  Cart.prototype.getItems = function() {
+    return this.products;
+  };
 
   Cart.prototype.save = function() {
     if (this.products.length)
@@ -82,3 +91,5 @@ const AceCart = (function() {
 
   return Cart;
 })();
+
+const shopping = new AceCart("shopping");
