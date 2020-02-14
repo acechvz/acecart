@@ -30,7 +30,7 @@ If you add the same item again the quantity in the cart will be automatically up
 ```javascript
 shopping.add( product )
 ```
-```json
+```javascript
 [{
 	id: 1,
 	name: 'Sample Product',
@@ -46,7 +46,7 @@ shopping.getItems()
 ```
 
 This will return an array like this.
-```json
+```javascript
 [{
 	id: 1,
 	name: 'Sample Product',

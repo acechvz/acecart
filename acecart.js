@@ -41,8 +41,13 @@ const AceCart = (function() {
   Cart.prototype.remove = function(id) {
     if (!id || typeof id !== "number") throw new Error("bad id, check it!");
 
-    if (this.exists(id))
-      this.products = this.products.filter(el => el.id !== id);
+    const item = this.exists(id);
+    if (item) {
+      const doDelete = confirm(`¿Eliminar "${item.name} de su carrito?"`);
+      if (doDelete) {
+        this.products = this.products.filter(el => el.id !== id);
+      }
+    }
 
     this.save();
   };
@@ -79,17 +84,72 @@ const AceCart = (function() {
   };
 
   Cart.prototype.save = function() {
-    if (this.products.length)
-      localStorage.setItem(`${this.name}Cart`, JSON.stringify(this.products));
+    localStorage.setItem(`${this.name}Cart`, JSON.stringify(this.products));
+    this.refresh();
+  };
+
+  Cart.prototype.refresh = function() {
+    const counter = document.querySelector("[data-items-count]");
+    const total = document.querySelector("[data-cart-total]");
+    const priceBlock = document.querySelector(".cart-price");
+    const purchaseButton = document.querySelector("[data-cart-buy]");
+    if (counter) {
+      counter.textContent = this.countItems();
+    }
+
+    if (total) {
+      total.textContent = this.total()
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    if (!this.countItems()) {
+      priceBlock.classList.add("hide");
+      purchaseButton.classList.add("disabled");
+    } else {
+      priceBlock.classList.remove("hide");
+      purchaseButton.classList.remove("disabled");
+    }
+
+    this.showItems();
+  };
+
+  Cart.prototype.showItems = function() {
+    const dropdown = document.querySelector("[data-cart-list]");
+
+    if (dropdown && this.products.length) {
+      let cartContent = "";
+      this.products.forEach(product => {
+        cartContent += `
+            <div class="cart-dropdown-item">
+                <button class="delete" onclick="${this.name}.remove(${product.id})"><i class="fa fa-times"></i></button>
+                <img src="${product.image}" alt="">
+                <span>
+                    ${product.name} <br>
+                    <small>$<span>${product.price}</span></small>
+                </span>
+                <span>${product.quantity}</span>
+            </div>`;
+      });
+
+      dropdown.innerHTML = cartContent;
+    } else {
+      dropdown.innerHTML = `
+        <h4 style="color: black">
+            Cart is empty <br>
+            <small style="font-weight: 300">Start adding some items</small>
+        </h4>`;
+    }
   };
 
   Cart.prototype.load = function() {
     const storageItems = localStorage.getItem(`${this.name}Cart`);
     if (!storageItems) this.clear();
     else this.products = JSON.parse(storageItems);
+
+    this.refresh();
   };
 
   return Cart;
 })();
-
-const shopping = new AceCart("shopping");

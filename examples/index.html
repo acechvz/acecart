@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ace Cart Example</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/shop.css">
+</head>
+<body>
+    <header class="header">
+        <h1>AceCart Shop</h1>
+
+        <div class="cart">
+            <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
+            <span class="cart-count">
+                <span data-items-count>0</span>
+            </span>
+            <div class="cart-dropdown">
+                <div class="cart-dropdown-box" data-cart-list></div>
+                <div class="cart-price">
+                    $<span data-cart-total></span>
+                </div>
+                <button data-cart-buy class="cart-buy">
+                    Purchase
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="items">
+        <div class="item" data-item="1">
+            <img data-cart-image src="https://http2.mlstatic.com/celular-samsung-s8-64gb-4gb-ram-detalle-demo-D_NQ_NP_734262-MLM31914970797_082019-Q.jpg" alt="iPhone Galaxy 30 " class="item-thumb">
+            <h3 data-cart-name>Samsung Galaxy S8</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, illo.</p>
+            <div class="item-price">
+                $<span data-cart-price>699.99</span>
+            </div>
+            <button class="item-add">
+                Add
+            </button>
+        </div>
+        <div class="item" data-item="2">
+            <img data-cart-image src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MWP22_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1572990511929" alt="Earpods Pro " class="item-thumb">
+            <h3 data-cart-name>Earpods Pro Lorem ipsum dolor sit amet.</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, illo.</p>
+            <div class="item-price">
+                $<span data-cart-price>179.99</span>
+            </div>
+            <button class="item-add">
+                Add
+            </button>
+        </div>
+        <div class="item" data-item="3">
+            <img data-cart-image src="https://lh3.googleusercontent.com/proxy/lTINXfsopp8iyOym44uEdXg4QKiR30Vt2jO8IGU1wSR-SWcy-DI-DMxsRoSeCrpXkb_uzWKY4QuDCTyq0QMgcyhjNI5KMuXuPBbQn2RqkBoRpW3QvP_k" alt="iPhone Galaxy 30 " class="item-thumb">
+            <h3 data-cart-name>iPhone 10 XS Max</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, illo.</p>
+            <div class="item-price">
+                $<span data-cart-price>999.99</span>
+            </div>
+            <button class="item-add">
+                Add
+            </button>
+        </div>
+        <div class="item" data-item="4">
+            <img data-cart-image src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/macbook-air-space-gray-select-201810?wid=892&hei=820&&qlt=80&.v=1541713862468" alt="iPhone Galaxy 30 " class="item-thumb">
+            <h3 data-cart-name>Macbook Air 13</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, illo.</p>
+            <div class="item-price">
+                $<span data-cart-price>599.99</span>
+            </div>
+            <button class="item-add">
+                Add
+            </button>
+        </div>
+    </div>
+
+    <script src="../acecart.js"></script>
+    <script>
+        const shopping = new AceCart('shopping');
+
+        const addButton = document.querySelectorAll('.item-add');
+
+        const addProduct = (el) => {
+            const parent = el.closest('.item');
+            const item = {}
+
+            item.id = parseInt(parent.dataset.item);
+            item.name = parent.querySelector('[data-cart-name]').textContent;
+            item.image = parent.querySelector('[data-cart-image]').getAttribute('src');
+            item.price = parseFloat(parent.querySelector('[data-cart-price]').textContent);
+
+            shopping.add(item);
+        }
+
+        addButton.forEach(function(button) {
+            button.addEventListener('click', function() {
+                addProduct(button);
+            });
+        })
+    </script>
+</body>
+</html>
